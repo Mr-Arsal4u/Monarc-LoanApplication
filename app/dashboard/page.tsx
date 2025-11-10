@@ -17,8 +17,6 @@ import Image from "next/image"
 
 export default function DashboardPage() {
   const router = useRouter()
-  const [cardPosition, setCardPosition] = useState({ x: 0, y: 0 })
-
   // Scroll animation variants
   const scrollFromLeft = {
     hidden: { opacity: 0, x: -100 },
@@ -63,23 +61,6 @@ export default function DashboardPage() {
       scale: 1, 
       transition: { duration: 0.6, ease: "easeOut" } 
     }
-  }
-
-  const handleCardMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const card = e.currentTarget
-    const rect = card.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
-    const centerX = rect.width / 2
-    const centerY = rect.height / 2
-    const rotateX = (y - centerY) / 15
-    const rotateY = (centerX - x) / 15
-    
-    setCardPosition({ x: rotateY, y: rotateX })
-  }
-
-  const handleMouseLeave = () => {
-    setCardPosition({ x: 0, y: 0 })
   }
 
   const handleLogout = () => {
@@ -302,7 +283,7 @@ export default function DashboardPage() {
           </div>
         </motion.div>
 
-        {/* Info Card with 3D Effect */}
+        {/* Info Card - Need Help Section */}
         <motion.div
           initial="hidden"
           animate="visible"
@@ -310,20 +291,15 @@ export default function DashboardPage() {
           viewport={{ once: false, amount: 0.3 }}
           variants={scrollScale}
           transition={{ delay: 0.5 }}
-          onMouseMove={handleCardMouseMove}
-          onMouseLeave={handleMouseLeave}
         >
           <motion.div
-            style={{
-              rotateX: cardPosition.y,
-              rotateY: cardPosition.x,
-              transformStyle: "preserve-3d",
-            }}
             className="glass-effect rounded-3xl p-8 relative overflow-hidden"
+            whileHover={{ scale: 1.02 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
           >
             <div className="absolute inset-0 opacity-10">
               <Image
-                src="/placeholder.jpg"
+                src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop&q=90"
                 alt=""
                 fill
                 className="object-cover"
@@ -346,8 +322,8 @@ export default function DashboardPage() {
               </div>
               <div className="relative h-64 rounded-2xl overflow-hidden">
                 <Image
-                  src="/placeholder.jpg"
-                  alt="Support"
+                  src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=800&h=600&fit=crop&q=90"
+                  alt="Customer support and assistance"
                   fill
                   className="object-cover"
                 />

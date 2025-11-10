@@ -220,8 +220,8 @@ export default function LoginPage() {
             <div className="glass-effect rounded-3xl p-8 relative overflow-hidden">
               <div className="relative h-96 rounded-2xl overflow-hidden">
                 <Image
-                  src="/placeholder.jpg"
-                  alt="Login"
+                  src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&h=600&fit=crop&q=90"
+                  alt="Secure login and authentication"
                   fill
                   className="object-cover"
                 />

@@ -350,8 +350,8 @@ export default function RegisterPage() {
             <div className="glass-effect rounded-3xl p-8 relative overflow-hidden">
               <div className="relative h-96 rounded-2xl overflow-hidden">
                 <Image
-                  src="/placeholder.jpg"
-                  alt="Register"
+                  src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=600&fit=crop&q=90"
+                  alt="Starting your loan application journey"
                   fill
                   className="object-cover"
                 />

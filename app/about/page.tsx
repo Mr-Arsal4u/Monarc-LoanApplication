@@ -1,7 +1,7 @@
 "use client"
 import { motion } from "framer-motion"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import { 
   Target, 
@@ -16,7 +16,11 @@ import {
 
 export default function AboutPage() {
   const router = useRouter()
-  const [cardPosition, setCardPosition] = useState({ x: 0, y: 0 })
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   // Scroll animation variants
   const scrollFromLeft = {
@@ -64,23 +68,6 @@ export default function AboutPage() {
     }
   }
 
-  const handleCardMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const card = e.currentTarget
-    const rect = card.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
-    const centerX = rect.width / 2
-    const centerY = rect.height / 2
-    const rotateX = (y - centerY) / 15
-    const rotateY = (centerX - x) / 15
-    
-    setCardPosition({ x: rotateY, y: rotateX })
-  }
-
-  const handleMouseLeave = () => {
-    setCardPosition({ x: 0, y: 0 })
-  }
-
   const values = [
     {
       icon: Target,
@@ -113,42 +100,73 @@ export default function AboutPage() {
   ]
 
   const team = [
-    { name: "Leadership Team", role: "Vision & Strategy", image: "/placeholder-user.jpg" },
-    { name: "Tech Team", role: "Innovation & Development", image: "/placeholder-user.jpg" },
-    { name: "Support Team", role: "Customer Success", image: "/placeholder-user.jpg" }
+    { 
+      name: "Leadership Team", 
+      role: "Vision & Strategy", 
+      image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&q=90" 
+    },
+    { 
+      name: "Tech Team", 
+      role: "Innovation & Development", 
+      image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop&q=90" 
+    },
+    { 
+      name: "Support Team", 
+      role: "Customer Success", 
+      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop&q=90" 
+    }
   ]
 
   return (
     <div className="min-h-screen gradient-bg overflow-hidden">
       {/* Navbar */}
       <nav className="fixed top-0 w-full z-50 glass-effect border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between relative">
           <motion.button
             onClick={() => router.push("/")}
-            className="gradient-text text-2xl font-bold"
-            whileHover={{ scale: 1.05 }}
-          >
-            Monarc inc
-          </motion.button>
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
+            className="flex items-center flex-shrink-0"
+            initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
-            className="flex gap-4"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Image
+              src="/white-logo.png"
+              alt="Monarc inc"
+              width={300}
+              height={100}
+              className="h-20 sm:h-24 w-auto"
+              priority
+            />
+          </motion.button>
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="flex items-center gap-4"
           >
             <motion.button 
               onClick={() => router.push("/about")}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="text-base font-medium text-muted-foreground hover:text-foreground transition-colors"
               whileHover={{ scale: 1.05 }}
             >
               About
             </motion.button>
             <motion.button 
               onClick={() => router.push("/contact")}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="text-base font-medium text-muted-foreground hover:text-foreground transition-colors"
               whileHover={{ scale: 1.05 }}
             >
               Contact
+            </motion.button>
+            <motion.button 
+              onClick={() => router.push("/login")}
+              className="px-4 py-2 rounded-lg bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-colors"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Login
             </motion.button>
           </motion.div>
         </div>
@@ -156,17 +174,13 @@ export default function AboutPage() {
 
       <motion.section
         className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6 }}
       >
         {/* Hero Section */}
         <motion.div
           className="text-center mb-20"
-          initial={false}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.3 }}
+          transition={{ duration: 0.6 }}
         >
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6">
             About <span className="gradient-text">Monarc inc</span>
@@ -177,32 +191,18 @@ export default function AboutPage() {
           </p>
         </motion.div>
 
-        {/* Mission Card with 3D Effect */}
+        {/* Our Story Section */}
         <motion.div
           className="mb-20"
-          initial={false}
+          initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: false, amount: 0.3 }}
-          onMouseMove={handleCardMouseMove}
-          onMouseLeave={handleMouseLeave}
+          transition={{ duration: 0.6, delay: 0.2 }}
         >
           <motion.div
-            style={{
-              rotateX: cardPosition.y,
-              rotateY: cardPosition.x,
-              transformStyle: "preserve-3d",
-            }}
             className="glass-effect rounded-3xl p-12 relative overflow-hidden"
+            whileHover={{ scale: 1.02 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
           >
-            <div className="absolute inset-0 opacity-10">
-              <Image
-                src="/placeholder.jpg"
-                alt=""
-                fill
-                className="object-cover"
-              />
-            </div>
             <div className="relative z-10 grid md:grid-cols-2 gap-12 items-center">
               <div>
                 <h2 className="text-4xl font-bold mb-4">Our Story</h2>
@@ -220,8 +220,8 @@ export default function AboutPage() {
               </div>
               <div className="relative h-80 rounded-2xl overflow-hidden">
                 <Image
-                  src="/placeholder.jpg"
-                  alt="Our story"
+                  src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=600&fit=crop&q=90"
+                  alt="Loan operators and real estate professionals"
                   fill
                   className="object-cover"
                 />
@@ -235,9 +235,11 @@ export default function AboutPage() {
           <motion.div
             className="text-center mb-12"
             initial="hidden"
+            animate={isMounted ? "visible" : "hidden"}
             whileInView="visible"
-            viewport={{ once: false, amount: 0.3 }}
+            viewport={{ once: true, amount: 0 }}
             variants={scrollFromUp}
+            transition={{ duration: 0.6 }}
           >
             <h2 className="text-4xl sm:text-5xl font-bold mb-4">Our Values</h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -252,9 +254,11 @@ export default function AboutPage() {
                 <motion.div
                   key={index}
                   initial="hidden"
+                  animate={isMounted ? "visible" : "hidden"}
                   whileInView="visible"
-                  viewport={{ once: false, amount: 0.3 }}
+                  viewport={{ once: true, amount: 0 }}
                   variants={direction}
+                  transition={{ delay: index * 0.1, duration: 0.6 }}
                   whileHover={{ scale: 1.05, y: -5 }}
                   className="glass-effect rounded-2xl p-6 text-center"
                 >
@@ -274,9 +278,11 @@ export default function AboutPage() {
           <motion.div
             className="text-center mb-12"
             initial="hidden"
+            animate={isMounted ? "visible" : "hidden"}
             whileInView="visible"
-            viewport={{ once: false, amount: 0.3 }}
+            viewport={{ once: true, amount: 0 }}
             variants={scrollFromDown}
+            transition={{ duration: 0.6 }}
           >
             <h2 className="text-4xl sm:text-5xl font-bold mb-4">Our Journey</h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -290,9 +296,11 @@ export default function AboutPage() {
                 <motion.div
                   key={index}
                   initial="hidden"
+                  animate={isMounted ? "visible" : "hidden"}
                   whileInView="visible"
-                  viewport={{ once: false, amount: 0.3 }}
+                  viewport={{ once: true, amount: 0 }}
                   variants={direction}
+                  transition={{ delay: index * 0.1, duration: 0.6 }}
                   className="glass-effect rounded-2xl p-6 flex items-center gap-6"
                 >
                   <div className="text-4xl font-bold gradient-text min-w-[100px]">
@@ -313,9 +321,11 @@ export default function AboutPage() {
           <motion.div
             className="text-center mb-12"
             initial="hidden"
+            animate={isMounted ? "visible" : "hidden"}
             whileInView="visible"
-            viewport={{ once: false, amount: 0.3 }}
+            viewport={{ once: true, amount: 0 }}
             variants={scrollFromUp}
+            transition={{ duration: 0.6 }}
           >
             <h2 className="text-4xl sm:text-5xl font-bold mb-4">Our Team</h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -330,9 +340,11 @@ export default function AboutPage() {
                 <motion.div
                   key={index}
                   initial="hidden"
+                  animate={isMounted ? "visible" : "hidden"}
                   whileInView="visible"
-                  viewport={{ once: false, amount: 0.3 }}
+                  viewport={{ once: true, amount: 0 }}
                   variants={direction}
+                  transition={{ delay: index * 0.1, duration: 0.6 }}
                   whileHover={{ scale: 1.05, y: -5 }}
                   className="glass-effect rounded-2xl p-6 text-center"
                 >
@@ -356,9 +368,11 @@ export default function AboutPage() {
         <motion.div
           className="glass-effect rounded-3xl p-12 text-center relative overflow-hidden"
           initial="hidden"
+          animate={isMounted ? "visible" : "hidden"}
           whileInView="visible"
-          viewport={{ once: false, amount: 0.3 }}
+          viewport={{ once: true, amount: 0 }}
           variants={scrollScale}
+          transition={{ duration: 0.6 }}
         >
           <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 opacity-50" />
           <div className="relative z-10">

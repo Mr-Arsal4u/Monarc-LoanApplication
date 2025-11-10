@@ -1,8 +1,9 @@
 "use client"
 import { motion } from "framer-motion"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
+import Lottie from "lottie-react"
 import { 
   Home as HomeIcon, 
   Building2, 
@@ -22,6 +23,43 @@ export default function Home() {
   const [heroPosition, setHeroPosition] = useState({ x: 0, y: 0 })
   const [residentialPosition, setResidentialPosition] = useState({ x: 0, y: 0 })
   const [commercialPosition, setCommercialPosition] = useState({ x: 0, y: 0 })
+  const [residentialLottie, setResidentialLottie] = useState<any>(null)
+  const [commercialLottie, setCommercialLottie] = useState<any>(null)
+
+  useEffect(() => {
+    // Fetch commercial/business/office themed Lottie animations
+    // Using the same animation for both residential and commercial cards
+    const commercialAnimations = [
+      'https://assets5.lottiefiles.com/packages/lf20_business_meeting.json', // Business meeting
+      'https://assets5.lottiefiles.com/packages/lf20_business_growth.json', // Business growth/chart
+      'https://assets5.lottiefiles.com/packages/lf20_office_building.json', // Office building
+      'https://assets5.lottiefiles.com/packages/lf20_skyscraper.json', // Skyscraper/building
+      'https://assets5.lottiefiles.com/packages/lf20_business_handshake.json', // Business handshake
+      'https://assets5.lottiefiles.com/packages/lf20_jcikwtux.json' // Fallback building (same for both)
+    ]
+    
+    // Use the same animations for residential as commercial
+    const residentialAnimations = commercialAnimations
+    
+    const tryFetchAnimation = (urls: string[], setter: (data: any) => void, index: number = 0) => {
+      if (index >= urls.length) {
+        setter(null)
+        return
+      }
+      
+      fetch(urls[index])
+        .then(res => {
+          if (!res.ok) throw new Error('Failed to fetch')
+          return res.json()
+        })
+        .then(data => setter(data))
+        .catch(() => tryFetchAnimation(urls, setter, index + 1))
+    }
+    
+    // Fetch both animations
+    tryFetchAnimation(residentialAnimations, setResidentialLottie)
+    tryFetchAnimation(commercialAnimations, setCommercialLottie)
+  }, [])
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -96,8 +134,9 @@ export default function Home() {
     const y = e.clientY - rect.top
     const centerX = rect.width / 2
     const centerY = rect.height / 2
-    const rotateX = (y - centerY) / 15
-    const rotateY = (centerX - x) / 15
+    // More rotation range but slower response
+    const rotateX = (y - centerY) / 18
+    const rotateY = (centerX - x) / 18
     
     setHeroPosition({ x: rotateY, y: rotateX })
   }
@@ -138,21 +177,21 @@ export default function Home() {
       role: "Homeowner",
       content: "The application process was incredibly smooth and fast. I got approved in just 3 days!",
       rating: 5,
-      avatar: "/placeholder-user.jpg"
+      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop&q=80"
     },
     {
       name: "Michael Chen",
       role: "Business Owner",
       content: "Best loan application experience I've ever had. The commercial loan process was straightforward and professional.",
       rating: 5,
-      avatar: "/placeholder-user.jpg"
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&q=80"
     },
     {
       name: "Emily Rodriguez",
       role: "Real Estate Investor",
       content: "I've used this portal for multiple properties. The interface is intuitive and saves me so much time.",
       rating: 5,
-      avatar: "/placeholder-user.jpg"
+      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop&q=80"
     }
   ]
 
@@ -197,31 +236,41 @@ export default function Home() {
     <div className="min-h-screen gradient-bg overflow-hidden">
       {/* Navbar */}
       <nav className="fixed top-0 w-full z-50 glass-effect border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-          <motion.h1
-            className="gradient-text text-2xl font-bold"
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between relative">
+          <motion.button
+            onClick={() => router.push("/")}
+            className="flex items-center flex-shrink-0"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            Monarc inc
-          </motion.h1>
+            <Image
+              src="/white-logo.png"
+              alt="Monarc inc"
+              width={300}
+              height={100}
+              className="h-20 sm:h-24 w-auto"
+              priority
+            />
+          </motion.button>
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="flex gap-4"
+            className="flex items-center gap-4"
           >
             <motion.button 
               onClick={() => router.push("/about")}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="text-base font-medium text-muted-foreground hover:text-foreground transition-colors"
               whileHover={{ scale: 1.05 }}
             >
               About
             </motion.button>
             <motion.button 
               onClick={() => router.push("/contact")}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="text-base font-medium text-muted-foreground hover:text-foreground transition-colors"
               whileHover={{ scale: 1.05 }}
             >
               Contact
@@ -245,16 +294,16 @@ export default function Home() {
         <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
           <motion.div 
             className="text-center lg:text-left"
-            initial={false}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: false, amount: 0.3 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6 }}
           >
             <motion.div
-              initial={false}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false, amount: 0.3 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.6 }}
               className="inline-block mb-4 px-4 py-2 rounded-full glass-effect border border-primary/20"
             >
               <span className="text-sm text-primary font-semibold">Fast • Secure • Reliable</span>
@@ -269,10 +318,10 @@ export default function Home() {
             </p>
             <motion.div 
               className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
-              initial={false}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false, amount: 0.3 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
             >
               <motion.button
                 onClick={() => router.push("/residential")}
@@ -296,10 +345,10 @@ export default function Home() {
           {/* 3D Image Card */}
           <motion.div
             className="relative"
-            initial={false}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: false, amount: 0.3 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6 }}
             onMouseMove={handleHeroMouseMove}
             onMouseLeave={() => handleMouseLeave(setHeroPosition)}
           >
@@ -309,13 +358,14 @@ export default function Home() {
                 rotateY: heroPosition.x,
                 transformStyle: "preserve-3d",
               }}
+              transition={{ type: "spring", stiffness: 80, damping: 25, mass: 1.5 }}
               className="relative"
             >
               <div className="glass-effect rounded-3xl p-8 shadow-2xl transform-gpu">
                 <div className="relative h-96 rounded-2xl overflow-hidden mb-6">
                   <Image
-                    src="/placeholder.jpg"
-                    alt="Modern home"
+                    src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&h=800&fit=crop&q=90"
+                    alt="Modern luxury home"
                     fill
                     className="object-cover"
                     priority
@@ -327,14 +377,22 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="glass-effect rounded-xl p-4 text-center">
+                  <motion.div 
+                    className="glass-effect rounded-xl p-4 text-center cursor-pointer"
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    transition={{ duration: 0.2 }}
+                  >
                     <div className="text-3xl font-bold gradient-text mb-1">24hrs</div>
                     <div className="text-xs text-muted-foreground">Fast Approval</div>
-                  </div>
-                  <div className="glass-effect rounded-xl p-4 text-center">
+                  </motion.div>
+                  <motion.div 
+                    className="glass-effect rounded-xl p-4 text-center cursor-pointer"
+                    whileHover={{ scale: 1.05, y: -2 }}
+                    transition={{ duration: 0.2 }}
+                  >
                     <div className="text-3xl font-bold gradient-text mb-1">98%</div>
                     <div className="text-xs text-muted-foreground">Success Rate</div>
-                  </div>
+                  </motion.div>
                 </div>
               </div>
             </motion.div>
@@ -353,7 +411,7 @@ export default function Home() {
                 key={index}
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: false, amount: 0.3 }}
+                viewport={{ once: true, amount: 0.3 }}
                 variants={direction}
                 whileHover={{ scale: 1.05, y: -5 }}
                 className="glass-effect rounded-2xl p-6 text-center"
@@ -372,8 +430,9 @@ export default function Home() {
             className="text-center mb-12"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: false, amount: 0.2 }}
+            viewport={{ once: true, amount: 0.2 }}
             variants={scrollFromDown}
+            transition={{ duration: 0.6, ease: "easeOut" }}
           >
             <h2 className="text-4xl sm:text-5xl font-bold mb-4">Why Choose Us</h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -389,9 +448,10 @@ export default function Home() {
                   key={index}
                   initial="hidden"
                   whileInView="visible"
-                  viewport={{ once: false, amount: 0.3 }}
+                  viewport={{ once: true, amount: 0.3 }}
                   variants={direction}
-                  whileHover={{ scale: 1.05, y: -5 }}
+                  transition={{ duration: 0.6, ease: "easeOut", delay: index * 0.1 }}
+                  whileHover={{ scale: 1.05, y: -5, transition: { duration: 0.2 } }}
                   className="glass-effect rounded-2xl p-6 text-center relative overflow-hidden"
                 >
                   <div className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity">
@@ -423,8 +483,9 @@ export default function Home() {
             className="text-center mb-12"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: false, amount: 0.2 }}
+            viewport={{ once: true, amount: 0.2 }}
             variants={scrollFromDown}
+            transition={{ duration: 0.6, ease: "easeOut" }}
           >
             <h2 className="text-4xl sm:text-5xl font-bold mb-4">Success Stories</h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -432,30 +493,68 @@ export default function Home() {
             </p>
           </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-            {[1, 2, 3, 4, 5, 6].map((item, index) => {
+            {[
+              {
+                id: 1,
+                title: "Modern Family Home",
+                description: "Dream home achieved in 30 days",
+                image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&h=600&fit=crop&q=90"
+              },
+              {
+                id: 2,
+                title: "Luxury Estate",
+                description: "Premium property financing completed",
+                image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&h=600&fit=crop&q=90"
+              },
+              {
+                id: 3,
+                title: "Urban Apartment",
+                description: "City living made affordable",
+                image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&h=600&fit=crop&q=90"
+              },
+              {
+                id: 4,
+                title: "Suburban Dream",
+                description: "Perfect neighborhood found",
+                image: "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&h=600&fit=crop&q=90"
+              },
+              {
+                id: 5,
+                title: "Coastal Retreat",
+                description: "Beachfront property secured",
+                image: "https://images.unsplash.com/photo-1600607687644-c7171b42498f?w=800&h=600&fit=crop&q=90"
+              },
+              {
+                id: 6,
+                title: "Mountain View",
+                description: "Scenic property approved",
+                image: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&h=600&fit=crop&q=90"
+              }
+            ].map((story, index) => {
               const directions = [scrollFromLeft, scrollFromRight, scrollFromUp, scrollFromDown, scrollFromLeft, scrollFromRight]
               const direction = directions[index % directions.length]
               return (
                 <motion.div
-                  key={index}
+                  key={story.id}
                   initial="hidden"
                   whileInView="visible"
-                  viewport={{ once: false, amount: 0.3 }}
+                  viewport={{ once: true, amount: 0.3 }}
                   variants={direction}
-                  whileHover={{ scale: 1.05, y: -5 }}
+                  transition={{ duration: 0.6, ease: "easeOut", delay: index * 0.1 }}
+                  whileHover={{ scale: 1.05, y: -5, transition: { duration: 0.2 } }}
                   className="glass-effect rounded-2xl overflow-hidden relative group cursor-pointer"
                 >
                   <div className="relative h-64 w-full">
                     <Image
-                      src={index % 3 === 0 ? "/placeholder.jpg" : index % 3 === 1 ? "/placeholder.svg" : "/placeholder-logo.png"}
-                      alt={`Success story ${item}`}
+                      src={story.image}
+                      alt={story.title}
                       fill
                       className="object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                     <div className="absolute bottom-4 left-4 right-4 text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                      <h3 className="text-xl font-bold mb-1">Project {item}</h3>
-                      <p className="text-sm opacity-90">Successfully funded and completed</p>
+                      <h3 className="text-xl font-bold mb-1">{story.title}</h3>
+                      <p className="text-sm opacity-90">{story.description}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -497,6 +596,7 @@ export default function Home() {
                   transformStyle: "preserve-3d",
                 }}
                 variants={cardVariants}
+                transition={{ type: "spring", stiffness: 80, damping: 25, mass: 1.5 }}
                 whileHover={{ scale: 1.05 }}
                 className="glass-effect rounded-2xl p-8 h-full flex flex-col justify-between hover:border-primary/50 transition-colors relative overflow-hidden"
               >
@@ -509,13 +609,22 @@ export default function Home() {
                   <p className="text-muted-foreground mb-6">
                     Complete Form 1003 for mortgage applications. Includes borrower info, employment, assets, and property details.
                   </p>
-                  <div className="relative h-48 rounded-xl overflow-hidden mb-6">
-                    <Image
-                      src="/placeholder.jpg"
-                      alt="Residential home"
-                      fill
-                      className="object-cover"
-                    />
+                  <div className="relative h-48 rounded-xl overflow-hidden mb-6 bg-gradient-to-br from-primary/10 to-primary/5">
+                    {residentialLottie ? (
+                      <Lottie
+                        animationData={residentialLottie}
+                        loop={true}
+                        autoplay={true}
+                        style={{ width: '100%', height: '100%' }}
+                        rendererSettings={{
+                          preserveAspectRatio: 'xMidYMid slice'
+                        }}
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-16 h-16 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+                      </div>
+                    )}
                   </div>
                 </div>
                 <motion.button
@@ -547,6 +656,7 @@ export default function Home() {
                   transformStyle: "preserve-3d",
                 }}
                 variants={cardVariants}
+                transition={{ type: "spring", stiffness: 80, damping: 25, mass: 1.5 }}
                 whileHover={{ scale: 1.05 }}
                 className="glass-effect rounded-2xl p-8 h-full flex flex-col justify-between hover:border-accent/50 transition-colors relative overflow-hidden"
               >
@@ -559,13 +669,22 @@ export default function Home() {
                   <p className="text-muted-foreground mb-6">
                     Complete ARC Form for business loans. Includes entity info, loan purpose, collateral, and authorized signers.
                   </p>
-                  <div className="relative h-48 rounded-xl overflow-hidden mb-6">
-                    <Image
-                      src="/placeholder.jpg"
-                      alt="Commercial building"
-                      fill
-                      className="object-cover"
-                    />
+                  <div className="relative h-48 rounded-xl overflow-hidden mb-6 bg-gradient-to-br from-accent/10 to-accent/5">
+                    {commercialLottie ? (
+                      <Lottie
+                        animationData={commercialLottie}
+                        loop={true}
+                        autoplay={true}
+                        style={{ width: '100%', height: '100%' }}
+                        rendererSettings={{
+                          preserveAspectRatio: 'xMidYMid slice'
+                        }}
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-16 h-16 border-4 border-accent/30 border-t-accent rounded-full animate-spin" />
+                      </div>
+                    )}
                   </div>
                 </div>
                 <motion.button
@@ -641,8 +760,9 @@ export default function Home() {
             className="text-center mb-12"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: false, amount: 0.2 }}
+            viewport={{ once: true, amount: 0.2 }}
             variants={scrollFromUp}
+            transition={{ duration: 0.6, ease: "easeOut" }}
           >
             <h2 className="text-4xl sm:text-5xl font-bold mb-4">What Our Customers Say</h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -658,9 +778,10 @@ export default function Home() {
                   key={index}
                   initial="hidden"
                   whileInView="visible"
-                  viewport={{ once: false, amount: 0.3 }}
+                  viewport={{ once: true, amount: 0.3 }}
                   variants={direction}
-                  whileHover={{ scale: 1.05, y: -5 }}
+                  transition={{ duration: 0.6, ease: "easeOut", delay: index * 0.1 }}
+                  whileHover={{ scale: 1.05, y: -5, transition: { duration: 0.2 } }}
                   className="glass-effect rounded-2xl p-6 relative overflow-hidden"
                 >
                   <div className="absolute top-0 right-0 w-24 h-24 opacity-10">
@@ -734,8 +855,9 @@ export default function Home() {
           className="border-t border-border pt-12 pb-8"
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: false, amount: 0.2 }}
+          viewport={{ once: true, amount: 0.5 }}
           variants={scrollFromUp}
+          transition={{ duration: 0.6, ease: "easeOut" }}
         >
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>

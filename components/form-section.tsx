@@ -32,20 +32,20 @@ export default function FormSection({ title, description, children }: FormSectio
 
   return (
     <motion.div
-      className="glass-effect rounded-2xl p-8 mb-8"
+      className="glass-effect rounded-2xl p-6 mb-6"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <motion.h2 className="text-2xl font-bold mb-2" variants={itemVariants}>
+      <motion.h2 className="text-xl font-bold mb-2" variants={itemVariants}>
         {title}
       </motion.h2>
       {description && (
-        <motion.p className="text-muted-foreground mb-6" variants={itemVariants}>
+        <motion.p className="text-sm text-muted-foreground mb-4" variants={itemVariants}>
           {description}
         </motion.p>
       )}
-      <motion.div className="space-y-6" variants={containerVariants} initial="hidden" animate="visible">
+      <motion.div className="space-y-4" variants={containerVariants} initial="hidden" animate="visible">
         {children}
       </motion.div>
     </motion.div>

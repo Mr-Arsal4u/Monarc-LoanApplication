@@ -2,6 +2,7 @@
 import { motion } from "framer-motion"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import Image from "next/image"
 import { 
   Mail, 
   Phone, 
@@ -169,33 +170,52 @@ export default function ContactPage() {
     <div className="min-h-screen gradient-bg overflow-hidden">
       {/* Navbar */}
       <nav className="fixed top-0 w-full z-50 glass-effect border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between relative">
           <motion.button
             onClick={() => router.push("/")}
-            className="gradient-text text-2xl font-bold"
-            whileHover={{ scale: 1.05 }}
-          >
-            Monarc inc
-          </motion.button>
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
+            className="flex items-center flex-shrink-0"
+            initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
-            className="flex gap-4"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Image
+              src="/white-logo.png"
+              alt="Monarc inc"
+              width={300}
+              height={100}
+              className="h-20 sm:h-24 w-auto"
+              priority
+            />
+          </motion.button>
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="flex items-center gap-4"
           >
             <motion.button 
               onClick={() => router.push("/about")}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="text-base font-medium text-muted-foreground hover:text-foreground transition-colors"
               whileHover={{ scale: 1.05 }}
             >
               About
             </motion.button>
             <motion.button 
               onClick={() => router.push("/contact")}
-              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              className="text-base font-medium text-muted-foreground hover:text-foreground transition-colors"
               whileHover={{ scale: 1.05 }}
             >
               Contact
+            </motion.button>
+            <motion.button 
+              onClick={() => router.push("/login")}
+              className="px-4 py-2 rounded-lg bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-colors"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Login
             </motion.button>
           </motion.div>
         </div>
