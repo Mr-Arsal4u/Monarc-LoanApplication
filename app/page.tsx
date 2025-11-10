@@ -701,7 +701,7 @@ export default function Home() {
             className="text-center mb-12"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: false, amount: 0.2 }}
+            viewport={{ once: true, amount: 0.5, margin: "0px 0px -100px 0px" }}
             variants={scrollFromDown}
           >
             <h2 className="text-4xl sm:text-5xl font-bold mb-4">How It Works</h2>
@@ -718,8 +718,9 @@ export default function Home() {
                   key={index}
                   initial="hidden"
                   whileInView="visible"
-                  viewport={{ once: false, amount: 0.3 }}
+                  viewport={{ once: true, amount: 0.6, margin: "0px 0px -50px 0px" }}
                   variants={direction}
+                  transition={{ duration: 0.6, ease: "easeOut", delay: index * 0.1 }}
                   whileHover={{ scale: 1.05, y: -5 }}
                   className="glass-effect rounded-2xl p-6 text-center relative overflow-hidden"
                 >
