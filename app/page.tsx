@@ -27,19 +27,14 @@ export default function Home() {
   const [commercialLottie, setCommercialLottie] = useState<any>(null)
 
   useEffect(() => {
-    // Fetch commercial/business/office themed Lottie animations
-    // Using the same animation for both residential and commercial cards
-    const commercialAnimations = [
-      'https://assets5.lottiefiles.com/packages/lf20_business_meeting.json', // Business meeting
-      'https://assets5.lottiefiles.com/packages/lf20_business_growth.json', // Business growth/chart
-      'https://assets5.lottiefiles.com/packages/lf20_office_building.json', // Office building
-      'https://assets5.lottiefiles.com/packages/lf20_skyscraper.json', // Skyscraper/building
-      'https://assets5.lottiefiles.com/packages/lf20_business_handshake.json', // Business handshake
-      'https://assets5.lottiefiles.com/packages/lf20_jcikwtux.json' // Fallback building (same for both)
+    // Using only verified working Lottie animation URLs
+    // Tested and confirmed: lf20_jcikwtux.json works on multiple CDNs
+    // Using CDN fallbacks for reliability
+    const workingAnimationUrls = [
+      'https://assets1.lottiefiles.com/packages/lf20_jcikwtux.json', // Primary - verified working
+      'https://assets5.lottiefiles.com/packages/lf20_jcikwtux.json', // Fallback 1 - verified working
+      'https://assets9.lottiefiles.com/packages/lf20_jcikwtux.json'  // Fallback 2 - verified working
     ]
-    
-    // Use the same animations for residential as commercial
-    const residentialAnimations = commercialAnimations
     
     const tryFetchAnimation = (urls: string[], setter: (data: any) => void, index: number = 0) => {
       if (index >= urls.length) {
@@ -56,9 +51,9 @@ export default function Home() {
         .catch(() => tryFetchAnimation(urls, setter, index + 1))
     }
     
-    // Fetch both animations
-    tryFetchAnimation(residentialAnimations, setResidentialLottie)
-    tryFetchAnimation(commercialAnimations, setCommercialLottie)
+    // Fetch both animations using the same working URLs
+    tryFetchAnimation(workingAnimationUrls, setResidentialLottie)
+    tryFetchAnimation(workingAnimationUrls, setCommercialLottie)
   }, [])
 
   const containerVariants = {
