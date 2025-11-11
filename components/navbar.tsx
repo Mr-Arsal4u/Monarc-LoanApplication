@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion"
 import { useRouter } from "next/navigation"
+import { ThemeToggle } from "./theme-toggle"
 
 interface NavbarProps {
   title: string
@@ -26,7 +27,7 @@ export function Navbar({ title }: NavbarProps) {
 
         <h1 className="gradient-text text-xl font-bold">{title}</h1>
 
-        <div className="w-12" />
+        <ThemeToggle />
       </div>
     </nav>
   )

@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { Mail, Lock, User, Phone, ArrowRight, Eye, EyeOff } from "lucide-react"
 import Image from "next/image"
+import { ThemeToggle } from "@/components/theme-toggle"
+import { Logo } from "@/components/logo"
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -132,22 +134,18 @@ export default function RegisterPage() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Image
-              src="/white-logo.png"
-              alt="Monarc inc"
-              width={300}
-              height={100}
-              className="h-20 sm:h-24 w-auto"
-              priority
-            />
+            <Logo priority />
           </motion.button>
-          <motion.button
-            onClick={() => router.push("/")}
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-            whileHover={{ scale: 1.05 }}
-          >
-            Back to Home
-          </motion.button>
+          <div className="flex items-center gap-4">
+            <motion.button
+              onClick={() => router.push("/")}
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              whileHover={{ scale: 1.05 }}
+            >
+              Back to Home
+            </motion.button>
+            <ThemeToggle />
+          </div>
         </div>
       </nav>
 

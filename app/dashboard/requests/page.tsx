@@ -13,6 +13,8 @@ import {
   Eye
 } from "lucide-react"
 import Image from "next/image"
+import { ThemeToggle } from "@/components/theme-toggle"
+import { Logo } from "@/components/logo"
 
 export default function RequestsPage() {
   const router = useRouter()
@@ -146,23 +148,19 @@ export default function RequestsPage() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Image
-              src="/white-logo.png"
-              alt="Monarc inc"
-              width={300}
-              height={100}
-              className="h-20 sm:h-24 w-auto"
-              priority
-            />
+            <Logo priority />
           </motion.button>
-          <motion.button
-            onClick={() => router.push("/dashboard")}
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2"
-            whileHover={{ scale: 1.05 }}
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Dashboard
-          </motion.button>
+          <div className="flex items-center gap-4">
+            <motion.button
+              onClick={() => router.push("/dashboard")}
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2"
+              whileHover={{ scale: 1.05 }}
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Dashboard
+            </motion.button>
+            <ThemeToggle />
+          </div>
         </div>
       </nav>
 

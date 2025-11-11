@@ -10,6 +10,7 @@ import {
   MapPin,
   Calendar
 } from "lucide-react"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export default function EditRequestPage() {
   const router = useRouter()
@@ -86,14 +87,17 @@ export default function EditRequestPage() {
           >
             Monarc inc
           </motion.button>
-          <motion.button
-            onClick={() => router.push("/dashboard/requests")}
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2"
-            whileHover={{ scale: 1.05 }}
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Requests
-          </motion.button>
+          <div className="flex items-center gap-4">
+            <motion.button
+              onClick={() => router.push("/dashboard/requests")}
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2"
+              whileHover={{ scale: 1.05 }}
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Requests
+            </motion.button>
+            <ThemeToggle />
+          </div>
         </div>
       </nav>
 

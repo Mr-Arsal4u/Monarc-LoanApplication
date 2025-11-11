@@ -7,6 +7,7 @@ import {
   ChevronDown,
   Search
 } from "lucide-react"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export default function FAQsPage() {
   const router = useRouter()
@@ -197,6 +198,7 @@ export default function FAQsPage() {
             >
               Contact
             </motion.button>
+            <ThemeToggle />
           </motion.div>
         </div>
       </nav>

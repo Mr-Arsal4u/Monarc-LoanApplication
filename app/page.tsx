@@ -17,6 +17,8 @@ import {
   Award
 } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { ThemeToggle } from "@/components/theme-toggle"
+import { Logo } from "@/components/logo"
 
 export default function Home() {
   const router = useRouter()
@@ -241,14 +243,7 @@ export default function Home() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Image
-              src="/white-logo.png"
-              alt="Monarc inc"
-              width={300}
-              height={100}
-              className="h-20 sm:h-24 w-auto"
-              priority
-            />
+            <Logo priority />
           </motion.button>
           <motion.div
             initial={{ opacity: 0, y: -10 }}
@@ -278,6 +273,7 @@ export default function Home() {
             >
               Login
             </motion.button>
+            <ThemeToggle />
           </motion.div>
         </div>
       </nav>

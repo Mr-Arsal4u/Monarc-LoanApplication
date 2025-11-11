@@ -12,6 +12,7 @@ import DocumentUpload from "@/components/commercial/document-upload"
 import FormStepTransition from "@/components/form-step-transition"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { CheckCircle2 } from "lucide-react"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export default function CommercialPage() {
   const router = useRouter()
@@ -75,8 +76,11 @@ export default function CommercialPage() {
             Back
           </button>
           <h1 className="gradient-text text-2xl font-bold">Commercial Loan Application</h1>
-          <div className="text-sm text-muted-foreground">
-            {steps.findIndex(s => s.id === activeTab) + 1} of {steps.length}
+          <div className="flex items-center gap-4">
+            <div className="text-sm text-muted-foreground">
+              {steps.findIndex(s => s.id === activeTab) + 1} of {steps.length}
+            </div>
+            <ThemeToggle />
           </div>
         </div>
       </nav>

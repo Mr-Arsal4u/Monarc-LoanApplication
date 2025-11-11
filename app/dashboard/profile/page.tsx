@@ -12,6 +12,8 @@ import {
   Edit
 } from "lucide-react"
 import Image from "next/image"
+import { ThemeToggle } from "@/components/theme-toggle"
+import { Logo } from "@/components/logo"
 
 export default function ProfilePage() {
   const router = useRouter()
@@ -79,14 +81,7 @@ export default function ProfilePage() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Image
-              src="/white-logo.png"
-              alt="Monarc inc"
-              width={300}
-              height={100}
-              className="h-20 sm:h-24 w-auto"
-              priority
-            />
+            <Logo priority />
           </motion.button>
           <div className="flex items-center gap-4">
             <motion.button
@@ -97,6 +92,7 @@ export default function ProfilePage() {
               <ArrowLeft className="w-4 h-4" />
               Back to Dashboard
             </motion.button>
+            <ThemeToggle />
           </div>
         </div>
       </nav>

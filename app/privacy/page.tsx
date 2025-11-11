@@ -3,6 +3,7 @@ import { motion } from "framer-motion"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { Shield, Lock, Eye, FileText, CheckCircle2 } from "lucide-react"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export default function PrivacyPage() {
   const router = useRouter()
@@ -147,6 +148,7 @@ export default function PrivacyPage() {
             >
               Contact
             </motion.button>
+            <ThemeToggle />
           </motion.div>
         </div>
       </nav>

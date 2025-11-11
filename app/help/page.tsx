@@ -12,6 +12,7 @@ import {
   Phone,
   Mail
 } from "lucide-react"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export default function HelpPage() {
   const router = useRouter()
@@ -155,6 +156,7 @@ export default function HelpPage() {
             >
               Contact
             </motion.button>
+            <ThemeToggle />
           </motion.div>
         </div>
       </nav>

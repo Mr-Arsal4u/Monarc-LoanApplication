@@ -11,6 +11,8 @@ import {
   CheckCircle2,
   MessageSquare
 } from "lucide-react"
+import { ThemeToggle } from "@/components/theme-toggle"
+import { Logo } from "@/components/logo"
 
 export default function ContactPage() {
   const router = useRouter()
@@ -180,14 +182,7 @@ export default function ContactPage() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Image
-              src="/white-logo.png"
-              alt="Monarc inc"
-              width={300}
-              height={100}
-              className="h-20 sm:h-24 w-auto"
-              priority
-            />
+            <Logo priority />
           </motion.button>
           <motion.div
             initial={{ opacity: 0, y: -10 }}
@@ -217,6 +212,7 @@ export default function ContactPage() {
             >
               Login
             </motion.button>
+            <ThemeToggle />
           </motion.div>
         </div>
       </nav>
