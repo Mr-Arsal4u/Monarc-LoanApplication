@@ -122,13 +122,24 @@ export default function RegisterPage() {
     <div className="min-h-screen gradient-bg overflow-hidden">
       {/* Navbar */}
       <nav className="fixed top-0 w-full z-50 glass-effect border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between relative">
           <motion.button
             onClick={() => router.push("/")}
-            className="gradient-text text-2xl font-bold"
+            className="flex items-center flex-shrink-0"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
             whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            Monarc inc
+            <Image
+              src="/white-logo.png"
+              alt="Monarc inc"
+              width={300}
+              height={100}
+              className="h-20 sm:h-24 w-auto"
+              priority
+            />
           </motion.button>
           <motion.button
             onClick={() => router.push("/")}
