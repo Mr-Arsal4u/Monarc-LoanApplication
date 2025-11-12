@@ -13,6 +13,7 @@ import {
 } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Logo } from "@/components/logo"
+import { contactApi } from "@/lib/api"
 
 export default function ContactPage() {
   const router = useRouter()
@@ -111,28 +112,41 @@ export default function ContactPage() {
 
     setIsSubmitting(true)
     
-    // Simulate API call
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500))
+      const response = await contactApi.submit(formData)
       
-      // Here you would typically send the data to your backend
-      console.log("Form submitted:", formData)
-      
-      setIsSubmitted(true)
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        subject: "",
-        message: ""
-      })
-      
-      // Reset success message after 5 seconds
-      setTimeout(() => {
-        setIsSubmitted(false)
-      }, 5000)
+      if (response.success) {
+        setIsSubmitted(true)
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          subject: "",
+          message: ""
+        })
+        setErrors({})
+        
+        // Reset success message after 5 seconds
+        setTimeout(() => {
+          setIsSubmitted(false)
+        }, 5000)
+      } else {
+        // Handle validation errors
+        if (response.errors) {
+          const newErrors: Record<string, string> = {}
+          Object.keys(response.errors).forEach((key) => {
+            newErrors[key] = Array.isArray(response.errors![key]) 
+              ? response.errors![key][0] 
+              : response.errors![key]
+          })
+          setErrors(newErrors)
+        } else {
+          setErrors({ submit: response.message || 'Failed to send message. Please try again.' })
+        }
+      }
     } catch (error) {
       console.error("Error submitting form:", error)
+      setErrors({ submit: 'An unexpected error occurred. Please try again.' })
     } finally {
       setIsSubmitting(false)
     }
@@ -293,7 +307,17 @@ export default function ContactPage() {
                   className="mb-6 p-4 rounded-lg bg-green-500/10 border border-green-500/20 flex items-center gap-3"
                 >
                   <CheckCircle2 className="w-5 h-5 text-green-500" />
-                  <p className="text-green-500">Thank you! Your message has been sent successfully.</p>
+                  <p className="text-green-500">Thank you! Your message has been sent successfully. We will get back to you soon!</p>
+                </motion.div>
+              )}
+
+              {errors.submit && (
+                <motion.div
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center gap-3"
+                >
+                  <p className="text-red-500">{errors.submit}</p>
                 </motion.div>
               )}
 
